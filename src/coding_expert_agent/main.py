@@ -68,3 +68,15 @@ if __name__ == "__main__":
     main()
 
 
+# coding_expert_agent/main.py
+
+# ... 기존 코드 그대로 유지 ...
+
+def handler(req_data):
+    """
+    Vercel용 서버리스 핸들러
+    req_data: {"messages": [{"role": "user", "content": "..."}]}
+    """
+    result = graph.invoke({"messages": req_data.get("messages", [])})
+    ai_msg = result["messages"][-1]
+    return {"message": getattr(ai_msg, "content", str(ai_msg))}
