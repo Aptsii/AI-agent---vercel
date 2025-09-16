@@ -144,11 +144,11 @@
             askButton.disabled = true;
 
             try {
-                const API_ENDPOINT = "https://ai-agent-vercel-zeta.vercel.app/ask"; // 실제 서버 주소로 변경
+                const API_ENDPOINT = "https://ai-agent-vercel-zeta.vercel.app/chat"; // 실제 서버 주소로 변경
                 const response = await fetch(API_ENDPOINT, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ question: question }),
+                    body: JSON.stringify({ user_message: question }),
                 });
 
                 if (!response.ok) throw new Error(`서버 오류: ${response.statusText}`);
