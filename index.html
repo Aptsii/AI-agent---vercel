@@ -155,7 +155,7 @@
 
                 const data = await response.json();
                 // 마크다운 변환
-                answerBox.innerHTML = marked.parse(data.answer);
+                answerBox.innerHTML = marked.parse(data.response);
 
             } catch (error) {
                 answerBox.innerText = `오류가 발생했습니다: ${error.message}`;
