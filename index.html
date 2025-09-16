@@ -144,7 +144,7 @@
             askButton.disabled = true;
 
             try {
-                const API_ENDPOINT = "https://ai-agent-hf78.onrender.com/ask"; // 실제 서버 주소로 변경
+                const API_ENDPOINT = "https://ai-agent-vercel-zeta.vercel.app/ask"; // 실제 서버 주소로 변경
                 const response = await fetch(API_ENDPOINT, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
