@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph import MessagesState
@@ -9,6 +10,19 @@ from .tools import get_company_stack, explain_language, simple_search_summary
 
 # FastAPI app instance
 app = FastAPI()
+
+# Add CORS middleware
+origins = [
+    "*", # Allow all origins for development. In production, specify your frontend's origin.
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Define request body for chat endpoint
 class ChatRequest(BaseModel):
