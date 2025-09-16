@@ -1,8 +1,18 @@
+from fastapi import FastAPI
+from pydantic import BaseModel
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph import MessagesState
 from langgraph.prebuilt import ToolNode, tools_condition
 from langchain_google_genai import ChatGoogleGenerativeAI
 from .tools import get_company_stack, explain_language, simple_search_summary
+
+
+# FastAPI app instance
+app = FastAPI()
+
+# Define request body for chat endpoint
+class ChatRequest(BaseModel):
+    user_message: str
 
 
 tools = [get_company_stack, explain_language, simple_search_summary]
@@ -51,18 +61,15 @@ graph_builder.add_edge("agent", END)
 graph = graph_builder.compile(name="coding_expert")
 
 
-def main():
-    print("[CodingExpert] 질문을 입력하세요. 종료하려면 빈 입력 후 Enter.")
-    while True:
-        user = input("You: ").strip()
-        if user == "":
-            break
-        result = graph.invoke({"messages": [
-            {"role": "user", "content": user}
-        ]})
-        ai_msg = result["messages"][-1]
-        print("AI:", getattr(ai_msg, "content", str(ai_msg)))
+@app.post("/chat")
+async def chat_endpoint(request: ChatRequest):
+    result = graph.invoke({"messages": [
+        {"role": "user", "content": request.user_message}
+    ]})
+    ai_msg = result["messages"][-1]
+    return {"response": getattr(ai_msg, "content", str(ai_msg))}
 
 
-if __name__ == "__main__":
-    main()
+@app.get("/")
+async def read_root():
+    return {"message": "Welcome to Stackload AI! Use the /chat endpoint to interact."}
